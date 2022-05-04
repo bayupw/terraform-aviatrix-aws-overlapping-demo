@@ -27,3 +27,13 @@ output "web_private_ip" {
   description = "Web Server Private IP"
   value       = module.web_server.aws_instance.private_ip
 }
+
+output "web_private_dns" {
+  description = "Web Server Private DNS name"
+  value       = aws_route53_record.web.name
+}
+
+output "web_virtual_ip" {
+  description = "Web Server Virtual IP"
+  value       = aws_route53_record.web.records[0]
+}
