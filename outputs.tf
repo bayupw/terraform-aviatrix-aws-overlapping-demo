@@ -35,5 +35,5 @@ output "web_private_dns" {
 
 output "web_virtual_ip" {
   description = "Web Server Virtual IP"
-  value       = aws_route53_record.web.records[0]
+  value       = aws_route53_record.web.records
 }
