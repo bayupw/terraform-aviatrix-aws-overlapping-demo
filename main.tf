@@ -173,3 +173,32 @@ resource "aws_vpn_gateway_route_propagation" "vgw_propagation" {
   vpn_gateway_id = aws_vpn_gateway.consumer_vgw.id
   route_table_id = module.vpcs["vpc_b"].public_route_table_ids[0]
 }
+
+# Create Private Zone aviatrix.demo
+resource "aws_route53_zone" "aviatrixdemo" {
+  name = "aviatrix.demo"
+
+  vpc {
+    vpc_id = module.vpcs["vpc_a"].vpc_id
+  }
+
+  vpc {
+    vpc_id = module.vpcs["vpc_b"].vpc_id
+  }
+}
+
+resource "aws_route53_record" "web" {
+  zone_id = aws_route53_zone.aviatrixdemo.zone_id
+  name    = "web.${aws_route53_zone.aviatrixdemo.name}"
+  type    = "A"
+  ttl     = "300"
+  records = ["100.64.0.11"]
+}
+
+resource "aws_route53_record" "client" {
+  zone_id = aws_route53_zone.aviatrixdemo.zone_id
+  name    = "client.${aws_route53_zone.aviatrixdemo.name}"
+  type    = "A"
+  ttl     = "300"
+  records = ["100.65.0.11"]
+}
